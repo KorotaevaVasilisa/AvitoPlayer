@@ -4,5 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TracksApi(
-    val tracks:List<TracksApi>
+    val tracks: TracksData
+)
+
+@Serializable
+data class TracksData(
+    val data: List<TrackApi>
 )
