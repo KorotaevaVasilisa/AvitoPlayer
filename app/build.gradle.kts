@@ -67,7 +67,9 @@ dependencies {
     // KSP
     implementation(libs.ksp.symbol.processing)
 
-    implementation(libs.ksp.symbol.processing)
+    //Navigation
+    implementation(libs.navigation.compose)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

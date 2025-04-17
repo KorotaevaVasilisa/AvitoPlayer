@@ -7,12 +7,25 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ru.vsls.player.Utils
+import ru.vsls.player.presentation.local.LocalScreen
+import ru.vsls.player.presentation.remote.RemoteScreen
 import ru.vsls.player.ui.theme.PlayerTheme
 
 @AndroidEntryPoint
@@ -23,29 +36,54 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PlayerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+                Surface {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = {
+                            NavigationBar {
+                                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                                val currentRoute = navBackStackEntry?.destination?.route
+                                Utils.BottomNavItems.forEach { topLevelRoute ->
+                                    NavigationBarItem(
+                                        icon = {
+                                            Icon(
+                                                topLevelRoute.icon,
+                                                contentDescription = topLevelRoute.title
+                                            )
+                                        },
+                                        label = { Text(topLevelRoute.title) },
+                                        selected = currentRoute == topLevelRoute.route,
+                                        onClick = {
+                                            navController.navigate(topLevelRoute.route) {
+                                                popUpTo(navController.graph.findStartDestination().id) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        },
+                    ) { innerPadding ->
+                        NavHost(navController, startDestination = Screen.RemoteScreen.route, Modifier.padding(innerPadding)) {
+                            composable(Screen.RemoteScreen.route) { RemoteScreen() }
+                            composable(Screen.LocalScreen.route) { LocalScreen() }
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     PlayerTheme {
-        Greeting("Android")
+
     }
 }
