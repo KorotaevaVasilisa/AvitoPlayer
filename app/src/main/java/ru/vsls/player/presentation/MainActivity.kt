@@ -43,29 +43,39 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         bottomBar = {
-                            NavigationBar {
+
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                                 val currentRoute = navBackStackEntry?.destination?.route
-                                Utils.BottomNavItems.forEach { topLevelRoute ->
-                                    NavigationBarItem(
-                                        icon = {
-                                            Icon(
-                                                topLevelRoute.icon,
-                                                contentDescription = topLevelRoute.title
-                                            )
-                                        },
-                                        label = { Text(topLevelRoute.title) },
-                                        selected = currentRoute == topLevelRoute.route,
-                                        onClick = {
-                                            navController.navigate(topLevelRoute.route) {
-                                                popUpTo(navController.graph.findStartDestination().id) {
-                                                    saveState = true
+
+                                val shouldShowBottomBar = when {
+                                    currentRoute?.startsWith(Screen.PlayerScreen.route) == true -> false // Скрываем для плеера
+                                    currentRoute in setOf(Screen.LocalScreen.route, Screen.RemoteScreen.route) -> true
+                                    else -> false
+                                }
+
+                                if(shouldShowBottomBar) {
+                                    NavigationBar {
+                                    Utils.BottomNavItems.forEach { topLevelRoute ->
+                                        NavigationBarItem(
+                                            icon = {
+                                                Icon(
+                                                    topLevelRoute.icon,
+                                                    contentDescription = topLevelRoute.title
+                                                )
+                                            },
+                                            label = { Text(topLevelRoute.title) },
+                                            selected = currentRoute == topLevelRoute.route,
+                                            onClick = {
+                                                navController.navigate(topLevelRoute.route) {
+                                                    popUpTo(navController.graph.findStartDestination().id) {
+                                                        saveState = true
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
                                                 }
-                                                launchSingleTop = true
-                                                restoreState = true
                                             }
-                                        }
-                                    )
+                                        )
+                                    }
                                 }
                             }
                         },
@@ -85,7 +95,7 @@ class MainActivity : ComponentActivity() {
                                 })
                             ) {backStackEntry ->
                                 val trackId = backStackEntry.arguments?.getLong("trackId") ?: 0L
-                                PlayerScreen(trackId)
+                                PlayerScreen(trackId, onClick = {navController.popBackStack()})
                             }
 
                         }
