@@ -24,11 +24,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import ru.vsls.player.R
 import ru.vsls.player.domain.entities.Track
+import ru.vsls.player.presentation.Screen
 
 @Composable
-fun RemoteScreen() {
+fun RemoteScreen(navController: NavController) {
     val viewModel: RemoteViewModel = hiltViewModel()
     val tracks by viewModel.tracks.collectAsState()
 
@@ -37,8 +39,10 @@ fun RemoteScreen() {
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
-            items(tracks) {track->
-                TrackItem(track)
+            items(tracks) { track ->
+                TrackItem(
+                    track,
+                    onClick = { navController.navigate(Screen.PlayerScreen.route + "/${track.id}") })
             }
         }
     }
@@ -47,13 +51,14 @@ fun RemoteScreen() {
 @Composable
 fun TrackItem(
     track: Track,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(4.dp)
-            .clickable{},
+            .padding(4.dp),
+        onClick = onClick,
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(
@@ -88,6 +93,6 @@ fun showItem() {
             preview = "https://example.com/preview2",
             coverHash = "def456",
             author = "Guns N' Roses"
-        )
+        ),{}
     )
 }

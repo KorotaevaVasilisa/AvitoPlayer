@@ -18,10 +18,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import ru.vsls.player.Utils
 import ru.vsls.player.presentation.local.LocalScreen
@@ -68,9 +70,24 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                     ) { innerPadding ->
-                        NavHost(navController, startDestination = Screen.RemoteScreen.route, Modifier.padding(innerPadding)) {
-                            composable(Screen.RemoteScreen.route) { RemoteScreen() }
+                        NavHost(
+                            navController,
+                            startDestination = Screen.RemoteScreen.route,
+                            Modifier.padding(innerPadding)
+                        ) {
+                            composable(Screen.RemoteScreen.route) { RemoteScreen(navController) }
                             composable(Screen.LocalScreen.route) { LocalScreen() }
+
+                            composable(
+                                Screen.PlayerScreen.route+"/{trackId}",
+                                arguments = listOf(navArgument("trackId") {
+                                    type = NavType.LongType
+                                })
+                            ) {backStackEntry ->
+                                val trackId = backStackEntry.arguments?.getLong("trackId") ?: 0L
+                                PlayerScreen(trackId)
+                            }
+
                         }
                     }
                 }
