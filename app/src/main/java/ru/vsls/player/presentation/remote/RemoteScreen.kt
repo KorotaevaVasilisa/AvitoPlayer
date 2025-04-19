@@ -46,7 +46,10 @@ fun RemoteScreen(navController: NavController) {
             items(tracksRemoteState.tracks) { track ->
                 TrackItem(
                     track,
-                    onClick = { navController.navigate(Screen.PlayerScreen.route + "/${track.id}") },
+                    onClick = {
+                        viewModel.preparePlaylist()
+                        navController.navigate(Screen.PlayerScreen.route + "/${track.id}")
+                    },
                     getIconUrl = viewModel::getCoverUrl
                 )
             }

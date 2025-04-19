@@ -70,6 +70,9 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
 
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.ui)
+
     //Navigation
     implementation(libs.navigation.compose)
     implementation(libs.hilt.navigation.compose)
