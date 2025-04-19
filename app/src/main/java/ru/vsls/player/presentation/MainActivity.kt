@@ -27,6 +27,7 @@ import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import ru.vsls.player.Utils
 import ru.vsls.player.presentation.local.LocalScreen
+import ru.vsls.player.presentation.player.PlayerScreen
 import ru.vsls.player.presentation.remote.RemoteScreen
 import ru.vsls.player.ui.theme.PlayerTheme
 
@@ -95,7 +96,7 @@ class MainActivity : ComponentActivity() {
                                 })
                             ) {backStackEntry ->
                                 val trackId = backStackEntry.arguments?.getLong("trackId") ?: 0L
-                                PlayerScreen(trackId, onClick = {navController.popBackStack()})
+                                PlayerScreen( onClick = {navController.popBackStack()})
                             }
 
                         }
