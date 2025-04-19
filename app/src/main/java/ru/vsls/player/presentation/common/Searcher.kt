@@ -22,9 +22,10 @@ import ru.vsls.player.R
 
 @Composable
 fun SearchView(
+    searchTitle:String,
     onSearch: (String) -> Unit,
 ) {
-    val nameTrack = remember{mutableStateOf("")}
+    val nameTrack = remember{mutableStateOf(searchTitle)}
     Box(modifier = Modifier) {
         OutlinedTextField(
             modifier = Modifier
@@ -35,7 +36,7 @@ fun SearchView(
             trailingIcon = {
                 IconButton(
                     onClick = { onSearch(nameTrack.value) },
-                    enabled =  nameTrack.value.isNotBlank()
+                    //enabled =  nameTrack.value.isNotBlank()
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
@@ -56,5 +57,5 @@ fun SearchView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSearchView() {
-    SearchView( {})
+    SearchView("Emi", {})
 }
