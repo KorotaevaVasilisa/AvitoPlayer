@@ -18,6 +18,7 @@ fun PlayerScreen(id:Long, onClick:()->Unit) {
         modifier = Modifier.padding(16.dp)
     ) {
         Icon(Icons.Default.ArrowBack, "Назад")
+
     }
     Text("$id")
 }

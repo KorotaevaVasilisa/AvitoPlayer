@@ -28,4 +28,8 @@ class RemoteViewModel @Inject constructor(private val remoteRepository: RemoteRe
             _tracks.value = remoteRepository.findRemoteTracksByTitle(title)
         }
     }
+
+    fun getCoverUrl(hash:String, size: Int = 200): String {
+        return "https://cdn-images.dzcdn.net/images/cover/$hash/${size}x${size}-000000-80-0-0.jpg"
+    }
 }

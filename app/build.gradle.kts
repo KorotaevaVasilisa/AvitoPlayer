@@ -67,6 +67,9 @@ dependencies {
     // KSP
     implementation(libs.ksp.symbol.processing)
 
+    //Coil
+    implementation(libs.coil.compose)
+
     //Navigation
     implementation(libs.navigation.compose)
     implementation(libs.hilt.navigation.compose)
