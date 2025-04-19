@@ -1,0 +1,20 @@
+package ru.vsls.player.data.network.entities
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class TrackApi(
+    val id: Long,
+    val title: String,
+    val duration: Int,
+    val preview: String,
+    @SerialName("md5_image") val coverHash: String,
+    val artist: Artist,
+)
+
+@Serializable
+data class Artist(
+    val id:Long,
+    val name:String
+)
