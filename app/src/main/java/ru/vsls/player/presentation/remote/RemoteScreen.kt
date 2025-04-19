@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import ru.vsls.player.R
 import ru.vsls.player.domain.entities.Track
 import ru.vsls.player.presentation.Screen
+import ru.vsls.player.presentation.common.SearchView
 
 @Composable
 fun RemoteScreen(navController: NavController) {
@@ -35,6 +36,7 @@ fun RemoteScreen(navController: NavController) {
     val tracks by viewModel.tracks.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
+        SearchView (onSearch = viewModel::searchTracks)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = 8.dp)

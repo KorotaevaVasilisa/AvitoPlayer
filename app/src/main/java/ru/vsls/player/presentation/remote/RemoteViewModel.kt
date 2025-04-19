@@ -12,20 +12,20 @@ import ru.vsls.player.domain.repositories.RemoteRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class RemoteViewModel  @Inject constructor(private val remoteRepository: RemoteRepository):
+class RemoteViewModel @Inject constructor(private val remoteRepository: RemoteRepository) :
     ViewModel() {
     private val _tracks = MutableStateFlow<List<Track>>(emptyList())
     val tracks = _tracks.asStateFlow()
 
-    init{
+    init {
         viewModelScope.launch(Dispatchers.IO) {
-            _tracks.value =  remoteRepository.getAllRemoteTracks()
+            _tracks.value = remoteRepository.getAllRemoteTracks()
         }
     }
 
-    public fun getTracksByTitle(title:String=""){
+    fun searchTracks(title: String = "") {
         viewModelScope.launch(Dispatchers.IO) {
-            _tracks.value =  remoteRepository.findRemoteTracksByTitle(title)
+            _tracks.value = remoteRepository.findRemoteTracksByTitle(title)
         }
     }
 }
