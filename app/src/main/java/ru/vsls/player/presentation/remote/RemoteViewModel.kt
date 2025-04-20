@@ -74,6 +74,8 @@ class RemoteViewModel @Inject constructor(
                 .setTag(track)
                 .build()
         }
+        // Очищаем предыдущий плейлист
+        exoPlayer.clearMediaItems()
         exoPlayer.setMediaItems(mediaItems)
         exoPlayer.prepare()
     }

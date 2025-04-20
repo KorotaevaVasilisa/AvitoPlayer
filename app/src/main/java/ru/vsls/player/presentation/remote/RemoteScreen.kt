@@ -48,7 +48,7 @@ fun RemoteScreen(navController: NavController) {
                     track,
                     onClick = {
                         viewModel.preparePlaylist()
-                        navController.navigate(Screen.PlayerScreen.route + "/${track.id}")
+                        navController.navigate(Screen.PlayerScreen.route + "/${track.id}?position=${track.position-1}")
                     },
                     getIconUrl = viewModel::getCoverUrl
                 )
@@ -101,7 +101,7 @@ fun TrackItem(
 
 @Preview
 @Composable
-fun showItem() {
+fun ShowItem() {
     TrackItem(
         Track(
             id = 2,
@@ -109,6 +109,7 @@ fun showItem() {
             duration = 356,
             preview = "https://example.com/preview2",
             coverHash = "def456",
+            position = 3,
             author = "Guns N' Roses"
         ), {}, { str -> str }
     )
