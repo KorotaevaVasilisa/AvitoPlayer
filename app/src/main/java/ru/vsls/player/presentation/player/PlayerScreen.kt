@@ -22,14 +22,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import ru.vsls.player.R
 
 @Composable
 fun PlayerScreen(onClick: () -> Unit) {
     val viewModel: PlayerViewModel = hiltViewModel()
-    val track = viewModel.track
+    val state = viewModel.playerState.collectAsState()
+    val track = state.value.currentTrack
+    val duration = state.value.duration
+    val currentDuration = state.value.currentDuration
 
     IconButton(onClick = onClick) {
         Icon(
@@ -59,8 +61,11 @@ fun PlayerScreen(onClick: () -> Unit) {
         Text(track.title, style = MaterialTheme.typography.headlineMedium)
         Text(track.author, style = MaterialTheme.typography.bodyLarge)
 
+        Row {
+            Text(currentDuration.msToMmSs()+" / "+duration.msToMmSs())
+        }
         PlayerControls(
-            viewModel.isPlaying.collectAsState().value,
+            state.value.exoPlayerState,
             viewModel::previous,
             viewModel::next,
             viewModel::playPause
@@ -115,8 +120,15 @@ fun PlayerControls(
     }
 }
 
+fun Long.msToMmSs(): String {
+    val totalSeconds = this / 1000
+    val minutes = totalSeconds / 60
+    val seconds = totalSeconds % 60
+    return String.format("%02d:%02d", minutes, seconds)
+}
+
 @Preview(showBackground = true)
 @Composable
 fun ShowPlayerScreen() {
-    PlayerScreen({})
+    PlayerScreen {}
 }
