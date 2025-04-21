@@ -20,6 +20,7 @@ hilt-version = "2.49"
 navigation = "2.8.9"
 hilt-navigation ="1.2.0"
 coil = "2.4.0"
+media3 ="1.3.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,6 +55,8 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", v
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 coil-compose = {group ="io.coil-kt", name = "coil-compose" , version.ref = "coil"}
+media3-exoplayer = {group = "androidx.media3", name = "media3-exoplayer", version.ref ="media3"}
+media3-ui = {group = "androidx.media3", name = "media3-ui", version.ref ="media3"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -10,11 +10,12 @@ data class TrackApi(
     val duration: Int,
     val preview: String,
     @SerialName("md5_image") val coverHash: String,
+    val position: Int,
     val artist: Artist,
 )
 
 @Serializable
 data class Artist(
-    val id:Long,
-    val name:String
+    val id: Long,
+    val name: String,
 )

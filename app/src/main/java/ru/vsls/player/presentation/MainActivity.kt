@@ -27,6 +27,7 @@ import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import ru.vsls.player.Utils
 import ru.vsls.player.presentation.local.LocalScreen
+import ru.vsls.player.presentation.player.PlayerScreen
 import ru.vsls.player.presentation.remote.RemoteScreen
 import ru.vsls.player.ui.theme.PlayerTheme
 
@@ -44,17 +45,21 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         bottomBar = {
 
-                                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                                val currentRoute = navBackStackEntry?.destination?.route
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val currentRoute = navBackStackEntry?.destination?.route
 
-                                val shouldShowBottomBar = when {
-                                    currentRoute?.startsWith(Screen.PlayerScreen.route) == true -> false // Скрываем для плеера
-                                    currentRoute in setOf(Screen.LocalScreen.route, Screen.RemoteScreen.route) -> true
-                                    else -> false
-                                }
+                            val shouldShowBottomBar = when {
+                                currentRoute?.startsWith(Screen.PlayerScreen.route) == true -> false // Скрываем для плеера
+                                currentRoute in setOf(
+                                    Screen.LocalScreen.route,
+                                    Screen.RemoteScreen.route
+                                ) -> true
 
-                                if(shouldShowBottomBar) {
-                                    NavigationBar {
+                                else -> false
+                            }
+
+                            if (shouldShowBottomBar) {
+                                NavigationBar {
                                     Utils.BottomNavItems.forEach { topLevelRoute ->
                                         NavigationBarItem(
                                             icon = {
@@ -89,13 +94,15 @@ class MainActivity : ComponentActivity() {
                             composable(Screen.LocalScreen.route) { LocalScreen() }
 
                             composable(
-                                Screen.PlayerScreen.route+"/{trackId}",
+                                Screen.PlayerScreen.route + "/{trackId}?position={position}",
                                 arguments = listOf(navArgument("trackId") {
                                     type = NavType.LongType
+                                }, navArgument("position") {
+                                    type = NavType.IntType
                                 })
-                            ) {backStackEntry ->
+                            ) { backStackEntry ->
                                 val trackId = backStackEntry.arguments?.getLong("trackId") ?: 0L
-                                PlayerScreen(trackId, onClick = {navController.popBackStack()})
+                                PlayerScreen(onClick = { navController.popBackStack() })
                             }
 
                         }
