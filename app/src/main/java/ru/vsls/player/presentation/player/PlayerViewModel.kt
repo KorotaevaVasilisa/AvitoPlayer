@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.vsls.player.domain.UseCaseCheckTrack
 import ru.vsls.player.domain.UseCaseDownload
 import ru.vsls.player.domain.entities.Track
 import ru.vsls.player.domain.repositories.LocalRepository
@@ -24,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
-    private val localRepository: LocalRepository,
+    private val useCaseCheckTrack: UseCaseCheckTrack,
     private val useCaseDownload: UseCaseDownload,
     private val exoPlayer: ExoPlayer,
     savedStateHandle: SavedStateHandle,
@@ -133,7 +134,7 @@ class PlayerViewModel @Inject constructor(
     fun downloadTrack() {
         viewModelScope.launch(Dispatchers.IO) {
             val current = _playerState.value.currentTrack
-            val result = localRepository.checkTrackId(current.id)
+            val result = useCaseCheckTrack.checkTrack(current.id)
             if (result == null) {
                 try {
                     useCaseDownload.loadTrack(current)
