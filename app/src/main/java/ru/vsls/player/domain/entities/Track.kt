@@ -5,6 +5,6 @@ data class Track(
     val title: String,
     val preview: String,
     val coverHash: String,
-    //val position: Int,
+    val position: Int,
     val author: String,
 )

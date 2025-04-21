@@ -9,7 +9,7 @@ data class TrackApi(
     val title: String,
     val preview: String,
     @SerialName("md5_image") val coverHash: String,
-    //val position: Int,
+    val position: Int,
     val artist: Artist,
 )
 

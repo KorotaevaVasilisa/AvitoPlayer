@@ -9,6 +9,7 @@ fun TrackDb.mapToDomain(): Track = Track(
     author = author,
     preview = preview,
     coverHash = icon,
+    position = 0
 )
 
 fun Track.mapToEntity(): TrackDb = TrackDb(

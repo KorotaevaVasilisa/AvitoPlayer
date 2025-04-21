@@ -8,6 +8,6 @@ fun TrackApi.mapToDomain(): Track = Track(
     title = title,
     preview = preview,
     coverHash = coverHash,
-    //position = position,
+    position = position,
     author = artist.name
 )

@@ -106,7 +106,6 @@ fun ShowItem() {
         Track(
             id = 2,
             title = "Sweet Child O'Mine",
-            duration = 356,
             preview = "https://example.com/preview2",
             coverHash = "def456",
             position = 3,

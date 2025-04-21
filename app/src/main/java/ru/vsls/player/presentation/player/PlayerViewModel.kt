@@ -7,7 +7,9 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,10 +17,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.vsls.player.domain.entities.Track
+import ru.vsls.player.domain.repositories.LocalRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
+    private val localRepository: LocalRepository,
     private val exoPlayer: ExoPlayer,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -39,7 +43,7 @@ class PlayerViewModel @Inject constructor(
         exoPlayer.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlayingNow: Boolean) {
                 _playerState.update { it.copy(exoPlayerState = isPlayingNow) }
-                if(isPlayingNow)
+                if (isPlayingNow)
                     startTrackingProgress()
                 else
                     stopTrackingProgress()
@@ -66,7 +70,7 @@ class PlayerViewModel @Inject constructor(
         })
     }
 
-    fun updateTrackInfo(){
+    fun updateTrackInfo() {
         val track = exoPlayer.currentMediaItem?.localConfiguration?.tag as? Track
         if (track != null) {
             _playerState.update {
@@ -108,7 +112,8 @@ class PlayerViewModel @Inject constructor(
 
     private fun updateProgress() {
         val position = exoPlayer.currentPosition
-        val duration = exoPlayer.duration.takeIf { it > 0 } ?: 30_000L // если вдруг null или 0, по дефолту 30 сек
+        val duration = exoPlayer.duration.takeIf { it > 0 }
+            ?: 30_000L // если вдруг null или 0, по дефолту 30 сек
 
         _playerState.update {
             it.copy(
@@ -120,6 +125,15 @@ class PlayerViewModel @Inject constructor(
     private fun stopTrackingProgress() {
         progressJob?.cancel()
         progressJob = null
+    }
+
+    fun downloadTrack() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val current = _playerState.value.currentTrack
+            val result = localRepository.checkTrackId(current.id)
+            if (result == null)
+                localRepository.insertTrack(current)
+        }
     }
 
     fun getCoverUrl(hash: String, size: Int = 300): String {
