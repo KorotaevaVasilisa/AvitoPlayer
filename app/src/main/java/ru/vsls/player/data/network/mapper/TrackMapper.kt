@@ -6,9 +6,8 @@ import ru.vsls.player.domain.entities.Track
 fun TrackApi.mapToDomain(): Track = Track(
     id = id,
     title = title,
-    duration = duration,
     preview = preview,
     coverHash = coverHash,
-    position = position,
+    //position = position,
     author = artist.name
 )
