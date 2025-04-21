@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.vsls.player.data.network.repo.RemoteRepositoryImpl
 import ru.vsls.player.data.storage.LocalRepositoryImpl
+import ru.vsls.player.domain.UseCaseDownload
+import ru.vsls.player.domain.UseCaseDownloadImpl
 import ru.vsls.player.domain.repositories.LocalRepository
 import ru.vsls.player.domain.repositories.RemoteRepository
 import javax.inject.Singleton
@@ -21,4 +23,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindLocalRepository(impl: LocalRepositoryImpl): LocalRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUseCaseDownload(useCaseDownloadImpl: UseCaseDownloadImpl): UseCaseDownload
 }

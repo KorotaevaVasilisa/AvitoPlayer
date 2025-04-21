@@ -1,5 +1,6 @@
 package ru.vsls.player.presentation.player
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.vsls.player.domain.UseCaseDownload
 import ru.vsls.player.domain.entities.Track
 import ru.vsls.player.domain.repositories.LocalRepository
 import javax.inject.Inject
@@ -23,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
     private val localRepository: LocalRepository,
+    private val useCaseDownload: UseCaseDownload,
     private val exoPlayer: ExoPlayer,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -131,8 +134,13 @@ class PlayerViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val current = _playerState.value.currentTrack
             val result = localRepository.checkTrackId(current.id)
-            if (result == null)
-                localRepository.insertTrack(current)
+            if (result == null) {
+                try {
+                    useCaseDownload.loadTrack(current)
+                } catch (e: Exception) {
+                    Log.e("download","Error downloading")
+                }
+            }
         }
     }
 
