@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 data class TrackApi(
     val id: Long,
     val title: String,
-    val duration: Int,
     val preview: String,
     @SerialName("md5_image") val coverHash: String,
     val position: Int,

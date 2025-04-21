@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -62,7 +63,7 @@ fun PlayerScreen(onClick: () -> Unit) {
         Text(track.author, style = MaterialTheme.typography.bodyLarge)
 
         Row {
-            Text(currentDuration.msToMmSs()+" / "+duration.msToMmSs())
+            Text(currentDuration.msToMmSs() + " / " + duration.msToMmSs())
         }
         PlayerControls(
             state.value.exoPlayerState,
@@ -70,18 +71,19 @@ fun PlayerScreen(onClick: () -> Unit) {
             viewModel::next,
             viewModel::playPause
         )
+        Button(onClick = {viewModel.downloadTrack()}) { Text(stringResource(R.string.download)) }
     }
 }
 
 @Composable
 fun PlayerControls(
-    state:Boolean,
+    state: Boolean,
     onPrevious: () -> Unit,
     onNext: () -> Unit,
     onPlay: () -> Unit,
 ) {
     Row {
-        IconButton(onClick = {onPrevious()}, modifier = Modifier.size(60.dp)) {
+        IconButton(onClick = { onPrevious() }, modifier = Modifier.size(60.dp)) {
             Icon(
                 painterResource(R.drawable.skip_previous),
                 contentDescription = stringResource(R.string.previous),
@@ -89,13 +91,13 @@ fun PlayerControls(
             )
         }
         IconButton(onClick = { onPlay() }, modifier = Modifier.size(60.dp)) {
-            if(!state) {
+            if (!state) {
                 Icon(
                     painterResource(R.drawable.play),
                     contentDescription = stringResource(R.string.play),
                     modifier = Modifier.fillMaxSize()
                 )
-            }else{
+            } else {
                 Icon(
                     painterResource(R.drawable.pause),
                     contentDescription = stringResource(R.string.pause),
@@ -110,7 +112,7 @@ fun PlayerControls(
 //                modifier = Modifier.fillMaxSize()
 //            )
 //        }
-        IconButton(onClick = {onNext()}, modifier = Modifier.size(60.dp)) {
+        IconButton(onClick = { onNext() }, modifier = Modifier.size(60.dp)) {
             Icon(
                 painterResource(R.drawable.skip_next),
                 contentDescription = stringResource(R.string.next),

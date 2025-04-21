@@ -8,7 +8,6 @@ data class PlayerScreenState(
     val currentTrack: Track = Track(
         id = 0,
         title = "",
-        duration = 30,
         preview = "",
         coverHash = "",
         position = 0,
