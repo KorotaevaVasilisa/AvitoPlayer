@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import ru.vsls.player.data.storage.enteties.TrackDb
 
 @Dao
@@ -16,5 +17,5 @@ interface TracksDao {
     suspend fun getTrackFromDb(id:Long):TrackDb?
 
     @Query("SELECT * FROM tracks_table")
-    suspend fun getAllTracksFromDb():List<TrackDb>
+    fun getAllTracksFromDb():Flow<List<TrackDb>>
 }

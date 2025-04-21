@@ -1,5 +1,7 @@
 package ru.vsls.player.data.storage
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.vsls.player.data.storage.dao.TracksDao
 import ru.vsls.player.data.storage.mapper.mapToDomain
 import ru.vsls.player.data.storage.mapper.mapToEntity
@@ -12,8 +14,10 @@ class LocalRepositoryImpl @Inject constructor(private val tracksDao: TracksDao) 
         return tracksDao.getTrackFromDb(id)?.mapToDomain()
     }
 
-    override suspend fun getTracksFromDb(): List<Track> {
-        return tracksDao.getAllTracksFromDb().map { track -> track.mapToDomain() }
+    override  fun getTracksFromDb(): Flow<List<Track>> {
+        return tracksDao.getAllTracksFromDb().map { list ->
+            list.map { track -> track.mapToDomain() }
+        }
     }
 
     override suspend fun insertTrack(track: Track) {
